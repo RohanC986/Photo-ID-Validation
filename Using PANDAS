@@ -1,0 +1,59 @@
+#Importing necessary libraries
+import pytesseract as tess
+import pandas as pd  
+tess.pytesseract.tesseract_cmd = r'D:tessract\\tesseract.exe'
+from PIL import Image
+import pandas as pd
+from matplotlib import pyplot as plt 
+import numpy as np
+
+# Importing data set from the excel sheet wich contain the user information.
+#It contains user information in--->['first name','last name','DOB','image_path']
+df = pd.read_excel (r'C:\\Users\\choud\\Desktop\Project\\data.xlsx', sheet_name='Sheet1')
+print (df)
+
+#CREATING FUNCTON TO VALIDATE IMAGE AND GIVEN DATA:-
+def REG(name,A):
+    global patterns
+    global img
+    print (name)
+    for ind in df[df.First_name == '{}'.format(name)].index:    # TAKING VALUES FROM TABLE FOR A GIVEN NAME   
+        LN=df['Last_name'][ind]        
+        FN=df['First_name'][ind]        
+        DOB=df['DOB'][ind]  
+        img=df['image'][ind]  
+        patterns = [LN,FN,DOB]
+    print(patterns)
+    image = Image.open(img)                                     # IMAGE TI TEXT CONVERSION
+    text = tess.image_to_string(img)
+    #print(text)
+    count=0
+    for i in patterns:                                         # FINDING THE INFORMATION IN CONVERTED TEXT                   
+        print("serching for {} in Informatin".format(i))
+        if i in text:
+            print ("match found")
+            count +=1
+        else:
+            print ("no match found")
+    if count==3:
+        print("Verified")
+        df.loc[A, 'status'] = 'Verified'                      # UPDATING STATUS TO DATA SET AGAIN
+        A=A+1
+    if count!=3:
+        df.loc[A , 'status'] = ' Not Verified'                # UPDATING STATUS TO DATA SET AGAIN
+        print("not verified")
+        A=A+1
+        
+        
+ **FOR VERIFYING ALL IMAGES:-**
+ i=0
+A=0
+for i in df.loc[: ,"First_name"]:
+    name= i
+    REG(name,A)
+    A=A+1
+**UPDATEING STATUS OF VERIFIED \ NOT VERIFIED IN DATA SET**
+df2 = df.copy()
+with pd.ExcelWriter(r'C:\\Users\\choud\\Desktop\Project\\data.xlsx', engine="openpyxl",mode='A') as writer:  
+    df2.to_excel(writer, sheet_name='Sheet2')
+print(df2)
