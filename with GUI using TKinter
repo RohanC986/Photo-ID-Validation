@@ -1,4 +1,4 @@
-#Imoporting all the required packages. 
+#Importing all the required packages. 
 import pytesseract as tess
 tess.pytesseract.tesseract_cmd =r'D:tessract\\tesseract.exe'
 from tkinter import messagebox as mb
