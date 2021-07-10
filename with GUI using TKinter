@@ -1,0 +1,96 @@
+#Imoporting all the required packages. 
+import pytesseract as tess
+tess.pytesseract.tesseract_cmd =r'D:tessract\\tesseract.exe'
+from tkinter import messagebox as mb
+from tkinter import filedialog
+import tkinter as tk
+from tkinter import *
+from PIL import ImageTk, Image
+
+#Creating a function for browsing of files.
+def browseFiles(): 
+    global filename
+    filename = filedialog.askopenfilename(initialdir = "/", 
+                                          title = "Select a File", 
+                                          filetypes = (("Jpeg file", 
+                                                        ".jpeg"), 
+                                                       ("all files", 
+                                                        "."))) 
+
+    
+#Using tkinter get function for taking input from user
+# & creating  a function for extraction of data from image and verify.
+def REG():
+    from PIL import Image
+    LN=e2.get()
+    FN=e1.get()
+    DOB=e3.get()
+    number=e4.get()
+    patterns = [LN,FN,DOB,number]
+    text = tess.image_to_string(filename)
+    print(text)
+    # Creating a loop for checking data in image as per user input.
+    count=0
+    for i in patterns:
+        print("serching for {} in Informatin".format(i))
+        if i in text:
+            print ("match found")
+            count +=1
+        else:
+            print ("no match found")
+    if count==4:
+        print("Verified")
+        mb.showinfo("Photo ID Verification","Verified")
+
+
+    else:
+        print("Not Verified")
+        mb.showerror("Photo ID Verification","Not Verified")
+
+#GUI Part
+
+#Creating a GUI window
+root=Tk()
+root.geometry("480x360+0+0")
+#Title for GUI.
+root.title("Photo ID Verification")
+#Background Image for GUI.
+my_img=ImageTk.PhotoImage(Image.open(r"C:\\Users\\choud\\Downloads\\background.jpg"))
+my_label=Label(image=my_img).place(x=1,y=0)
+#Icon for GUI.
+root.iconbitmap(r'C:\\Users\\choud\\Downloads\\dd.ico')
+#title=Label(root, text="Photo ID Verification",font=("Times new roman",40,"bold"),bg="yellow",fg="red",relief=GROOVE)
+#title.place(x=0,y=0,relwidth=1)
+#Creating a widget for User input in the GUI
+tk.Label(root, text="First Name").grid(row=1)
+tk.Label(root, text="Last Name").grid(row=2)
+tk.Label(root, text="DoB").grid(row=3)
+tk.Label(root,text="Adhaar Number").grid(row=4)
+e1 = tk.Entry(root)
+e2 = tk.Entry(root)
+e3 = tk.Entry(root)
+e4 = tk.Entry(root)
+
+e1.insert(10, "")
+e2.insert(10, "")
+e3.insert(10, "")
+e4.insert(10, "")
+
+e1.grid(row=1, column=1)
+e2.grid(row=2, column=1)
+e3.grid(row=3, column=1)
+e4.grid(row=4, column=1)
+
+#Creating buttons for GUI
+my_img1=ImageTk.PhotoImage(Image.open(r"C:\\Users\\choud\\Downloads\\correct.jpeg"))
+my_label1=Label(image=my_img1)
+my_img2=ImageTk.PhotoImage(Image.open(r"C:\\Users\\choud\Downloads\\browse.png"))
+my_label2=Label(image=my_img2)
+#Defining button,their command and the image for the button
+tk.Button(root, text='Verify', image=my_img1,command=REG).grid(row=7,column=0, sticky=tk.W, pady=2)
+button_explore = Button(root,
+                        text = "Browse Files", 
+                        command = browseFiles,image=my_img2)
+button_explore.grid(column = 0,row = 6)
+
+root.mainloop()
