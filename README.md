@@ -1,3 +1,5 @@
 # Photo-ID-Validation
 Build an algorithm that extracts the user's name from the image of  any Id card and validates it with the user's details in the application. To automate this process, we extract information from the uploaded image of the user's identity and compare it with the personal information given by the user. In python, we use optical character recognition algorithm to recognize and extract information from the User ID uploaded. As mentioned above, user can upload an identity picture from passport, student ID or driver's license, we've narrowed down to one aspect. We can extract information from the user’s id picture such as last name, first name and DOB which we can compare with the information uploaded by the user. We have built bounding boxes on the image for identifying relevant details from the image. The main goal is to validate the user's details with the text extracted from their identity picture. 
+
+
 ![image](https://user-images.githubusercontent.com/87241845/125172330-ce942b80-e1d6-11eb-8adc-e274d64fef4b.png)
